@@ -80,5 +80,5 @@ class Borrowing(models.Model):
         ordering = ["-borrow_date"]
 
     def __str__(self):
-        return f"{self.borrow_date}"
+        return f"{self.borrow_date}: {self.book.title}"
 
