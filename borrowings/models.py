@@ -32,7 +32,8 @@ class Borrowing(models.Model):
     ) -> None:
         if expected_return_date < borrow_date:
             raise error_to_raise({
-                "expected_return_date": "Return date cannot be earlier than the borrow date",
+                "expected_return_date":
+                    "Return date cannot be earlier than the borrow date",
             })
 
     @staticmethod
@@ -43,7 +44,8 @@ class Borrowing(models.Model):
     ) -> None:
         if actual_return_date and actual_return_date < borrow_date:
             raise error_to_raise({
-                "actual_return_date": "Return date cannot be earlier than the borrow date",
+                "actual_return_date":
+                    "Return date cannot be earlier than the borrow date",
             })
 
     def clean(self):

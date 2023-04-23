@@ -1,6 +1,6 @@
 import requests
 
-from library_api_workflow.settings import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+from library_api.settings import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
 
 def send_telegram_notification(

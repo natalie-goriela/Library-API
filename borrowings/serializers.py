@@ -88,7 +88,9 @@ class BorrowingsUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if instance.actual_return_date:
-            raise ValidationError("The actual return date has already been set")
+            raise ValidationError(
+                "The actual return date has already been set"
+            )
         book = instance.book
         book.inventory += 1
         book.save()
