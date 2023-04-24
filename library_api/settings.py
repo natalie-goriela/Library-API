@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "debug_toolbar",
     "rest_framework",
-    "rest_framework_simplejwt"
+    "rest_framework_simplejwt",
+    "user",
+    "books",
+    "borrowings"
 ]
 
 MIDDLEWARE = [
@@ -113,6 +116,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "user.User"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -143,7 +148,6 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "AUTH_HEADER_NAME": (
         "HTTP_AUTHORIZE"
     ),
