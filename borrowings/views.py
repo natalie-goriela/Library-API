@@ -1,5 +1,12 @@
-from rest_framework import mixins
+import datetime
+
+from django.db import transaction
+from rest_framework import mixins, status
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from borrowings.serializers import (
@@ -61,3 +68,27 @@ class BorrowingsViewSet(
         if self.action == "update":
             return BorrowingsUpdateSerializer
         return BorrowingsSerializer
+
+    @transaction.atomic()
+    @action(
+        methods=["PUT"],
+        detail=True,
+        url_path="return",
+        serializer_class=None
+    )
+    def return_borrowing(self, request: Request, pk: int = None) -> Response:
+
+        borrowing = self.get_object()
+
+        if borrowing.actual_return_date:
+            raise ValidationError("The book has already been returned")
+        if self.request.user != borrowing.user:
+            raise ValidationError("You have no access to this borrowing")
+
+        borrowing.actual_return_date = datetime.date.today()
+        borrowing.save()
+        book = borrowing.book
+        book.inventory += 1
+        book.save()
+        
+        return Response({"status": "Returned"}, status=status.HTTP_200_OK)
