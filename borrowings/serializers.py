@@ -74,28 +74,14 @@ class BorrowingsUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Borrowing
         fields = (
-            "actual_return_date",
+            "expected_return_date",
         )
 
     def validate(self, attrs):
         data = super(BorrowingsUpdateSerializer, self).validate(attrs=attrs)
-        Borrowing.validate_actual_return_date(
+        Borrowing.validate_expected_return_date(
             self.instance.borrow_date,
-            attrs["actual_return_date"],
+            attrs["expected_return_date"],
             ValidationError
         )
         return data
-
-    def update(self, instance, validated_data):
-        if instance.actual_return_date:
-            raise ValidationError(
-                "The actual return date has already been set"
-            )
-        book = instance.book
-        book.inventory += 1
-        book.save()
-        instance.actual_return_date = validated_data.get(
-            "actual_return_date"
-        )
-        instance.save()
-        return instance
